@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+
+    <title>login</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="background: skyblue">
+    <a class="navbar-brand" href="home">Welcome <h1>{{username}}</h1></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="home">Home </a>
+            {% if user.is.authenticated %}
+            <h3><a href="app2/logout">logout</a></h3>
+            {% else %}
+            <a class="nav-item nav-link" href="signup">signup </a>
+            <a class="nav-item nav-link active " href="login">login <span class="sr-only">(current)</span></a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+
+    <h1>Log in</h1>
+     {% if messages %}
+<div class="alert alert-warning" role="alert">
+  {% for message in messages %}
+     <h5>
+         {{message}}
+     </h5>
+     {% endfor %}
+</div>
+
+{% endif %}
+    <form action="login" method="post">
+    {% csrf_token %}
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input class="form-control"  name="username"  type="text" placeholder="username">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="password" class="form-control" id="inputPassword4" name="password" placeholder="password">
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Log in</button>
+
+
+</form>

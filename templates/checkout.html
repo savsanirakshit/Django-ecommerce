@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+            crossorigin="anonymous"
+    >
+
+    <title>Details</title>
+</head>
+<body class="bg_light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="background: skyblue">
+    <a class="navbar-brand" href="home">Welcome</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+            {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="{% url 'app:order_summary' %}">Cart</a>
+            <a class="nav-item nav-link" href="/logout">logout</a>
+            {% else %}
+            <a class="nav-item nav-link" href="{{ BASE_DIR }}/signup">signup</a>
+            <a class="nav-item nav-link" href="{{ BASE_DIR }}/login">login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% if messages %}
+<div class="alert alert-warning" role="alert">
+  {% for message in messages %}
+     <h5>
+         {{message}}
+     </h5>
+     {% endfor %}
+</div>
+
+{% endif %}
+
+<div class="container">
+    <div class="py-5 text-center">
+        <b><h1>Checkout</h1></b>
+      </div>
+<div class="row">
+
+        <div class="col-md-4 order-md-2 mb-4">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Your cart</span>
+            <span class="badge badge-secondary badge-pill">3</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+              <span class="text-muted">Product</span>
+              <span class="text-muted">Price</span>
+            </li>
+              {% for order_item in object.items.all %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+              <span class="text-muted">{{order_item.quantity}} x {{order_item.item.title}}</span>
+              <span class="text-muted">₹{{order_item.item.price}}</span>
+            </li>
+              {% endfor %}
+              <li class="list-group-item d-flex justify-content-between bg-light">
+
+              <div class="text-success">
+                <input type="text" class="form-control" placeholder="Promo code">
+                  </div>
+
+              <button type="submit" class="btn btn-secondary">Redeem</button>
+
+            </li>
+           <!-- <li class="list-group-item d-flex justify-content-between bg-light">
+              <div class="text-success">
+                <h6 class="my-0">Promo code</h6>
+                <small>EXAMPLECODE</small>
+              </div>
+              <span class="text-success">-$5</span>
+            </li>-->
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Total (INR)</span>
+              <strong>₹{{object.get_total}}</strong>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-8 order-md-1">
+
+
+          <h4 class="mb-3">Billing address</h4>
+          <form class="needs-validation" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label>Address</label>
+              {{ form.street_address }}
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label >Address 2 <span class="text-muted">(Optional)</span></label>
+              {{ form.apartment_address }}
+            </div>
+
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label>Country</label>
+                {{ form.country }}
+                <div class="invalid-feedback">
+                  Please select a valid country.
+                </div>
+              </div>
+              <div class="col-md-5 mb-3">
+
+              </div>
+              <div class="col-md-5 mb-3">
+                <label>State</label>
+                {{ form.state }}
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Zip</label>
+                {{ form.zip }}
+                <div class="invalid-feedback">
+                  Zip code required.
+                </div>
+              </div>
+            </div>
+            <hr class="mb-4">
+            <div>
+              {{ form.same_billing_address }}
+              <label>Shipping address is the same as my billing address</label>
+            </div>
+            <div>
+              {{ form.save_info }}
+              <label>Save this information for next time</label>
+            </div>
+            <hr class="mb-4">
+
+            <h4 class="mb-3">Payment</h4>
+
+            <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                {{ form.payment_options }}
+              </div>
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+          </form>
+        </div>
+</div></div>
+</body>
+</html>
